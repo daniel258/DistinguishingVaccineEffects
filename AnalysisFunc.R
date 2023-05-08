@@ -9,7 +9,7 @@ Analysis <- function(dataset, supp_S)
   B <- dataset[,"B"]
   Y <- dataset[,"Y"]
   ### 
-  # Biological effect assuming blinding
+  # Biological effect assuming perfect blinding
   bio_effect <- 1 - mean(Y[A==1])/mean(Y[A==0])
   # estimate E(Y|A,S,B)
   EY_ASB <- matrix(nr = 2*2*supp_S, nc = 4)
