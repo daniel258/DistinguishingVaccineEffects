@@ -3,6 +3,8 @@
 # prob_S_A is a matrix. Its j-th row gives Pr(S=j|A=0) (first column) and  Pr(S=j|A=1) (second column)
 # probs_B_S is a vector. The j-th entry is Pr(B=1|S=j)
 # probs_Y_AB is a 2X2 matrix of Pr(Y=1 | A=j, B = k) (rows for A)
+
+## DN: Should we actually simulate potential outcome?
 SimData <- function(N_A0, N_A1, prob_S_A, probs_B_S, probs_Y_AB)
 {
   if ((sum(prob_S_A0) != 1) | (sum(prob_S_A0) != 1))
