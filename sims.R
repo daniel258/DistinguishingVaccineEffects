@@ -1,4 +1,5 @@
-### This is just a script to toey around and see everything works fine
+library(tidyverse)
+### This is just a script to toy around and see everything works fine
 
 
 # prob_S_A is a matrix. Its j-th row gives Pr(S=j|A=0) (first column) and  Pr(S=j|A=1) (second column)
@@ -13,3 +14,6 @@ simulated_data <- SimData(N_A0 = 10000, N_A1 = 10000, prob_S_A = rbind(prob_S_A0
 
 
 Analysis(dataset = simulated_data, supp_S = 3)
+
+simulated_data %>% as.data.frame %>% filter(A==0 & S==2 & B==1) %>% select(Y) %>% unlist() %>%
+  as.numeric %>% mean
