@@ -1,6 +1,6 @@
 # dataset is a matrix of four columns with column names A,S,B,Y
 # supp_S is the number of possible values for S (at least 2)
-# Currrently report VE = 1 - RR 
+# Currently report VE = 1 - RR 
 
 Analysis <- function(dataset, supp_S)
 {
@@ -24,9 +24,16 @@ Analysis <- function(dataset, supp_S)
     b <- EY_ASB[i, 3]
     EY_ASB[i, 4] <- mean(Y[A==a & S==s & B==b])
   }
-  EY_ASB
   #Estimate Pr(S|B)
+  prob_S_B0 <- prob_S_B1 <- vector(length = supp_S)
+  for (j in 1:supp_S)
+  {
+    prob_S_B0[j-1] <- mean(S[B==0]==(j-1))
+    prob_S_B1[j-1] <- mean(S[B==1]==(j-1))
+  }
   ## Plug in the identification formula for E(Y^{a,m})
   #EY_a0m0 <- 
-  
+  print(EY_ASB)
+  print(prob_S_B0)
+  print(prob_S_B1)
 }

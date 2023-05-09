@@ -1,6 +1,7 @@
 library(tidyverse)
 ### This is just a script to toy around and see everything works fine
-
+source("SeperatingVaccineEffects/AnalysisFunc.R")
+source("SeperatingVaccineEffects/SimData.R")
 
 # prob_S_A is a matrix. Its j-th row gives Pr(S=j|A=0) (first column) and  Pr(S=j|A=1) (second column)
 # probs_B_S is a vector. The j-th entry is Pr(B=1|S=j-1)
