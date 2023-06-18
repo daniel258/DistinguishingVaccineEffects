@@ -102,8 +102,8 @@ ggplot(df_all, aes(x = VE1, y = VE_total, group = RR_B, col = RR_B)) +
   # annotate("text", x=0.3, y=0.76, label="pertussis")+
   # geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
   # annotate("text", x=0.3, y=0.6, label="influenza")+
-  xlab("VE(-1)") +
-  ylab("VE(0) = VE(1)") + 
+  ylab("VE_t") +
+  xlab("VE(0) = VE(1)") + 
   #xlab("Biological VE \n [1-P(Y=1|A=1,B=b)/P(Y=1|A=0,B=b)]")+ylab("Observed VE")+  labs(color ="P(B=1|A=1)/P(B=1|A=0)")+
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0))+
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0))+
