@@ -49,14 +49,14 @@ my_df %>%
 # }
 
 ##plotting everything
-ggplot(df_all,aes(y = VE_total, x = VEminus1, group = RR_B, col = RR_B)) +
+ggplot(df_all,aes(x = VEminus1, y = VE_total, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-  geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
-  annotate("text", x=0.3, y=1, label="COVID-19")+
-  geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
-  annotate("text", x=0.3, y=0.76, label="pertussis")+
-  geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
-  annotate("text", x=0.3, y=0.6, label="influenza")+
+#  geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
+  # annotate("text", x=0.3, y=1, label="COVID-19")+
+  # geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
+  # annotate("text", x=0.3, y=0.76, label="pertussis")+
+  # geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
+  # annotate("text", x=0.3, y=0.6, label="influenza")+
   xlab("VE(-1)") +
   #xlab("Biological VE \n [1-P(Y=1|A=1,B=b)/P(Y=1|A=0,B=b)]")+ylab("Observed VE")+  labs(color ="P(B=1|A=1)/P(B=1|A=0)")+
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0))+
@@ -71,7 +71,7 @@ ggplot(df_all,aes(y = VE_total, x = VEminus1, group = RR_B, col = RR_B)) +
 
 ggsave("Plots/VEminus1VersusVEtotal.png")
 
-ggplot(df_all,aes(y = VE1, x = VEminus1, group = RR_B, col = RR_B)) +
+ggplot(df_all,aes(x = VEminus1, y = VE1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
   # geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
   # annotate("text", x=0.3, y=1, label="COVID-19")+
@@ -94,14 +94,14 @@ ggplot(df_all,aes(y = VE1, x = VEminus1, group = RR_B, col = RR_B)) +
 
 ggsave("Plots/VEminus1VersusVE01.png")
 
-ggplot(df_all,aes(y = VEtotal, x = VE1, group = RR_B, col = RR_B)) +
+ggplot(df_all,aes(x = VE1, y = VEtotal, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
   geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
-  annotate("text", x=0.3, y=1, label="COVID-19")+
-  geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
-  annotate("text", x=0.3, y=0.76, label="pertussis")+
-  geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
-  annotate("text", x=0.3, y=0.6, label="influenza")+
+  # annotate("text", x=0.3, y=1, label="COVID-19")+
+  # geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
+  # annotate("text", x=0.3, y=0.76, label="pertussis")+
+  # geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
+  # annotate("text", x=0.3, y=0.6, label="influenza")+
   xlab("VE(-1)") +
   ylab("VE(0) = VE(1)") + 
   #xlab("Biological VE \n [1-P(Y=1|A=1,B=b)/P(Y=1|A=0,B=b)]")+ylab("Observed VE")+  labs(color ="P(B=1|A=1)/P(B=1|A=0)")+
