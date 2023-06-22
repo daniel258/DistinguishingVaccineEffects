@@ -1,4 +1,4 @@
-#### VE comparison for Stensrud et al (2027)
+#### VE comparison for Stensrud et al (2057)
 # This file creates the plots comparing VE(-1), VE(0), VE(1) and VE_t 
 
 #### setting up stuff ####
@@ -36,32 +36,25 @@ my_df %>%
   group_by(VE_total,RR_B) %>%
   do(CalcVEs(.$VE_total,.$RR_B)) -> df_all
 
-##dataframe for plotting
-#datlong <- data.frame(observed = numeric(), sideeffect=numeric(), VEbio = numeric())
-
-##looping over the probability of unblinding and calculating the VEs
-# for (i in 1:length(Psidevaccvec)){
-#   Psidevacc <- Psidevaccvec[i]*Psideplac
-#   observedVacc <- baseline*RRbehav*(1 - VEbio)*Psidevacc + baseline*1*(1 - VEbio)*(1-Psidevacc)
-#   observedPlac <- baseline*RRbehav*Psideplac + baseline*1*(1-Psideplac)
-#   ObservedVE <- 1 -observedVacc/observedPlac
-#   datlong <- rbind(datlong,data.frame(observed = ObservedVE, sideeffect = Psidevaccvec[i],VEbio = VEbio))
-# }
-
 ##plotting everything
-ggplot(df_all,aes(x = VEminus1, y = VE_total, group = RR_B, col = RR_B)) +
+ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-#  geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
-  # annotate("text", x=0.3, y=1, label="COVID-19")+
-  # geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
-  # annotate("text", x=0.3, y=0.76, label="pertussis")+
-  # geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
-  # annotate("text", x=0.3, y=0.6, label="influenza")+
-  xlab("VE(-1)") +
-  #xlab("Biological VE \n [1-P(Y=1|A=1,B=b)/P(Y=1|A=0,B=b)]")+ylab("Observed VE")+  labs(color ="P(B=1|A=1)/P(B=1|A=0)")+
-  scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0))+
-  scale_x_continuous(limits = c(0, 1), expand = c(0, 0))+
-  #ggtitle(paste0("P(B=1|A=0)=0.5 \n","P(Y=1|B=1,A=a)/P(Y=1|B=0,A=a)=",as.character(RRbehav)))+
+  geom_segment(aes(x = 0, xend = 0.94, y = 0.94,yend = 0.94),col = "red") +
+  annotate("text", x = 0.3, y = 1, label = "COVID-19") +
+  geom_segment(aes(x = 0.71, xend = 1, y = 0.71, yend = 0.71), col = "red") +
+  annotate("text", x = 0.875, y = 0.76, label = "pertussis") +
+  geom_segment(aes(x = 0.55, xend = 1.00, y = 0.55, yend = 0.55), col = "red") +
+  annotate("text", x = 0.875, y = 0.6, label="influenza") +
+  # geom_segment(aes(x = 0, xend = 0.71, y = 0.71, yend = 0.71), col = "red") +
+  # annotate("text", x = 0.3, y = 0.76, label = "pertussis") +
+  # geom_segment(aes(x = 0, xend = 0.55, y = 0.55, yend = 0.55), col = "red") +
+  # annotate("text", x = 0.3, y = 0.6, label="influenza") +
+  ylab("VE(-1)") +   xlab("VE_t") +
+  scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0),
+                     sec.axis = sec_axis(~ .)) +
+#  scale_y_continuous(limits = c(0,1.1), breaks =  c(0.25, 0.50, 0.75, 0.94, 1.00),
+ #                    labels = c(0.25, 0.50, 0.75, "COVID-19", 1.00), expand = c(0,0))
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
   theme_Publication()+
   theme(plot.title = element_text(size = 10, face = "bold"))+
   theme(axis.title.x =  element_text(size = 10, face = "bold"))+  theme(axis.title.y =  element_text(size = 10, face = "bold"))+
@@ -71,21 +64,19 @@ ggplot(df_all,aes(x = VEminus1, y = VE_total, group = RR_B, col = RR_B)) +
 
 ggsave("Plots/VEminus1VersusVEtotal.png")
 
-ggplot(df_all,aes(x = VEminus1, y = VE1, group = RR_B, col = RR_B)) +
+ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-  # geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
-  # annotate("text", x=0.3, y=1, label="COVID-19")+
-  # geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
-  # annotate("text", x=0.3, y=0.76, label="pertussis")+
-  # geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
-  # annotate("text", x=0.3, y=0.6, label="influenza")+
-  xlab("VE(-1)") +
-  ylab("VE(0) = VE(1)") + 
-  #xlab("Biological VE \n [1-P(Y=1|A=1,B=b)/P(Y=1|A=0,B=b)]")+ylab("Observed VE")+  labs(color ="P(B=1|A=1)/P(B=1|A=0)")+
+  geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
+  annotate("text", x=0.3, y=1, label="COVID-19")+
+  geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
+  annotate("text", x=0.3, y=0.76, label="pertussis")+
+  geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
+  annotate("text", x=0.3, y=0.6, label="influenza")+
+  ylab("VE(-1)") +
+  xlab("VE(0) = VE(1)") + 
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0))+
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0))+
-  #ggtitle(paste0("P(B=1|A=0)=0.5 \n","P(Y=1|B=1,A=a)/P(Y=1|B=0,A=a)=",as.character(RRbehav)))+
-  theme_Publication()+
+  theme_Publication() +
   theme(plot.title = element_text(size = 10, face = "bold"))+
   theme(axis.title.x =  element_text(size = 10, face = "bold"))+  theme(axis.title.y =  element_text(size = 10, face = "bold"))+
   theme(legend.title =  element_text(size = 10, face = "bold"))+
