@@ -11,12 +11,23 @@ CalcRisks <- function(risk_a0m0, ve_tot, ve_m0, ve_m1,
   risk_a1m0 <- risk_a0m0*(1 - ve_m0)
   risk_a0m1 <- risk_a1m1/(1 - ve_m1)
   risk_a0mMinus1 <- risk_a0m1* ((1 - prS_a0)*prB_s0 + prS_a0*prB_s1) +
-                    risk_a1m0* ((1 - prS_a1)*(1 - prB_s0) + prS_a1*prB_s1)
-
-  return(list(risk_a0m0 = risk_a0m0, risk_a1m0 = risk_a1m0, risk_a0m1 = risk_a0m1, risk_a1m1= risk_a1m1))
+                    risk_a0m0* ((1 - prS_a0)*(1 - prB_s0) + prS_a0*(1 - prB_s1))
+  risk_a1mMinus1 <- risk_a1m1* ((1 - prS_a1)*prB_s0 + prS_a1*prB_s1) +
+    risk_a1m0* ((1 - prS_a1)*(1 - prB_s0) + prS_a1*(1 - prB_s1))
+  return(list(risk_a0m0 = risk_a0m0, risk_a1m0 = risk_a1m0, risk_a0m1 = risk_a0m1, risk_a1m1= risk_a1m1,
+              risk_a0mMinus1 = risk_a0mMinus1, risk_a1mMinus1 = risk_a1mMinus1))
 }
+all_risks <- CalcRisks(risk_a0m0 = 0.05, ve_tot = 0.4, ve_m0 = 0.2, ve_m1 = 0.1,
+          prS_a1 = 0.4, prS_a0 = 0.2, prB_s1 = 0.75, prB_s0 = 0.25)
 
+tab_all_risks <- matrix(nr = 3, nc = 2, byrow = F, 
+                        c(all_risks$risk_a0mMinus1, all_risks$risk_a0m0, all_risks$risk_a0m1,
+                          all_risks$risk_a1mMinus1, all_risks$risk_a1m0, all_risks$risk_a1m1))
+rownames(tab_all_risks) <- c("m = -1", "m = 0", "m = 1")
+colnames(tab_all_risks) <- c("a = 0", "a = 1")
 
+ve_minus1 <- 1 - 0.0355/0.04416667
+ve_minus1
 #### Flu A 
 ##incidence in pand A (serology)
 #incplacA=0.17
