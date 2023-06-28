@@ -35,7 +35,7 @@ colnames(my_df) <- c("VE_total", "RR_B")
 my_df %>% 
   group_by(VE_total,RR_B) %>%
   do(CalcVEs(.$VE_total,.$RR_B)) -> df_all
-
+#df_all$RR_B <- factor(df_all$RR_B)
 ##plotting everything
 ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
@@ -49,7 +49,7 @@ ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   # annotate("text", x = 0.3, y = 0.76, label = "pertussis") +
   # geom_segment(aes(x = 0, xend = 0.55, y = 0.55, yend = 0.55), col = "red") +
   # annotate("text", x = 0.3, y = 0.6, label="influenza") +
-  ylab("VE(-1)") +   xlab("VE_t") +
+  ylab("VE(-1)") +   xlab(expression("VE"[t])) +
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0),
                      sec.axis = sec_axis(~ .)) +
 #  scale_y_continuous(limits = c(0,1.1), breaks =  c(0.25, 0.50, 0.75, 0.94, 1.00),
@@ -57,12 +57,13 @@ ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
   theme_Publication()+
   theme(plot.title = element_text(size = 10, face = "bold"))+
-  theme(axis.title.x =  element_text(size = 10, face = "bold"))+  theme(axis.title.y =  element_text(size = 10, face = "bold"))+
+  theme(axis.title.x =  element_text(size = 10, face = "bold"))+  
+  theme(axis.title.y =  element_text(size = 10, face = "bold"))+
   theme(legend.title =  element_text(size = 10, face = "bold"))+
-  theme(legend.title =  element_text(size = 10, face = "bold"))+
+  theme(legend.title =  element_text(size = 10, face = "bold"))
   guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
-ggsave("Plots/VEminus1VersusVEtotal.png")
+ggsave("Plots/VEminus1VersusVEtotal2.png")
 
 ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
