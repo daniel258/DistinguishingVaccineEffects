@@ -1,5 +1,6 @@
 #### VE hypothetical example for Stensrud et al (2027)
 ### Modeled after Cowling et al. 2012 paper
+set.seed(314)
 
 #risk_a0m0, ve_tot, ve_m0, ve_m1,
 #prS_a1, prS_a0, prB_s1, prB_s0
@@ -14,140 +15,77 @@ CalcRisks <- function(risk_a0m0, ve_tot, ve_m0, ve_m1,
                     risk_a0m0* ((1 - prS_a0)*(1 - prB_s0) + prS_a0*(1 - prB_s1))
   risk_a1mMinus1 <- risk_a1m1* ((1 - prS_a1)*prB_s0 + prS_a1*prB_s1) +
     risk_a1m0* ((1 - prS_a1)*(1 - prB_s0) + prS_a1*(1 - prB_s1))
-  return(list(risk_a0m0 = risk_a0m0, risk_a1m0 = risk_a1m0, risk_a0m1 = risk_a0m1, risk_a1m1= risk_a1m1,
+  return(list(risk_a0m0 = risk_a0m0, risk_a1m0 = risk_a1m0, risk_a0m1 = risk_a0m1, risk_a1m1 = risk_a1m1,
               risk_a0mMinus1 = risk_a0mMinus1, risk_a1mMinus1 = risk_a1mMinus1))
 }
-all_risks <- CalcRisks(risk_a0m0 = 0.05, ve_tot = 0.4, ve_m0 = 0.2, ve_m1 = 0.1,
-          prS_a1 = 0.4, prS_a0 = 0.2, prB_s1 = 0.75, prB_s0 = 0.25)
+##### Setup ###
+risk_a0m0 <- 0.1395
+ve_tot <- 0.3; ve_m1 <- 0.6; ve_m0 <- 0.4
+prS_a1 <- 0.5; prS_a0 <- 0.21
+prB_s1 <- 0.7; prB_s0 <- 0.18
+
+all_risks <- CalcRisks(risk_a0m0 = risk_a0m0, ve_tot = ve_tot, ve_m0 = ve_m0, ve_m1 = ve_m1,
+          prS_a1 = prS_a1, prS_a0 = prS_a0, prB_s1 = prB_s1, prB_s0 = prB_s0)
 
 tab_all_risks <- matrix(nr = 3, nc = 2, byrow = F, 
                         c(all_risks$risk_a0mMinus1, all_risks$risk_a0m0, all_risks$risk_a0m1,
                           all_risks$risk_a1mMinus1, all_risks$risk_a1m0, all_risks$risk_a1m1))
 rownames(tab_all_risks) <- c("m = -1", "m = 0", "m = 1")
 colnames(tab_all_risks) <- c("a = 0", "a = 1")
+tab_all_risks
 
-ve_minus1 <- 1 - 0.0355/0.04416667
-ve_minus1
-#### Flu A 
-##incidence in pand A (serology)
-#incplacA=0.17
-#inctreatA=0.09
-### Constants
-# From the trial
-N_A1 <- 479
-N_A0 <- 317
-Nsample <- N_A1 + N_A0
-# Pr(Y=1|A=a)
-prob_Y1A1 <- 0.09
-prob_Y1A0 <- 0.17
-# Here assume that B=1 if and only if 
-#pain/soreness of any severity was present (see above)
-# Pr(B=1|A=a)
-prob_B1A1 <- 0.41 + 0.08 + 0.01
-prob_B1A0 <- 0.19 + 0.02
-# Not from the trial
-thetaB_trt <- 1.25
-thetaB_untrt <- 1.75
-
-# Calculate Pr(Y=1|A,B) and put in a matrix
-# rows: B values columns: A values
-
-prob_Y_A0B0 <- prob_Y1A0/(1 + (thetaB_untrt -1)*prob_B1A0)
-prob_Y_A0B1 <- prob_Y_A0B0*thetaB_untrt
-prob_Y_A1B0 <- prob_Y1A1/(1 + (thetaB_trt -1)*prob_B1A1)
-prob_Y_A1B1 <- prob_Y_A1B0*thetaB_trt
-
-### Create hypothetical dataset
-### SET A
-A <- rep(0:1, times = c(N_A0, N_A1))
-
-### Simulate B given A
-
-B <- vector(length = Nsample)
-B[A==1] <- rbinom(N_A1, 1, prob_B1A1)
-B[A==0] <- rbinom(N_A0, 1, prob_B1A0)
-
-### Simulate Y given A,B
-N_A0B0 <- sum(A==0 & B==0) 
-N_A0B1 <- sum(A==0 & B==1)
-N_A1B0 <- sum(A==1 & B==0)
-N_A1B1 <- sum(A==1 & B==1)
-N_A0B0 + N_A0B1 + N_A1B0 + N_A1B1
-
-Y <- vector(length = Nsample)
-Y[A==0 & B==0] <- rbinom(N_A0B0, 1, prob_Y_A0B0)
-Y[A==0 & B==1] <- rbinom(N_A0B1, 1, prob_Y_A0B1)
-Y[A==1 & B==0] <- rbinom(N_A1B0, 1, prob_Y_A1B0)
-Y[A==1 & B==1] <- rbinom(N_A1B1, 1, prob_Y_A1B1)
-
-mean(Y[A==1])
-mean(Y[A==0])
-# 1-RR 
-1 - prob_Y_A1B1/prob_Y_A0B0
-1 - prob_Y_A1B1/prob_Y_A0B1
-1 - prob_Y_A1B1/prob_Y_A0B1
-
-mat <- matrix(nr = 2, nc = 2, c(prob_Y_A0B0, prob_Y_A0B1, prob_Y_A1B0, prob_Y_A1B1))
-rownames(mat) <- c("M=0", "M=1")
-colnames(mat) <- c("A=0", "A=1")
-round(mat,2)
-1 - prob_Y_A1B1/prob_Y_A0B0
-1 - prob_Y_A1B1/prob_Y_A0B1
-1 - prob_Y_A1B1/prob_Y_A0B1
-
-# prevtreat=p(B=1|A=1)*p(Y=1|A=1,B=1)+p(B=0|A=1)*p(Y=1|A=1,B=0)=0.03
-# prevtreat=0.5*p(Y=1|A=1,B=1)+0.5*p(Y=1|A=1,B=0)=0.03
-# prevtreat=0.5*RRunblindingtreat*p(Y=1|A=1,B=0)+0.5*p(Y=1|A=1,B=0)=0.03
-# p(Y=1|A=1,B=0)=0.03/(0.5(1+RRunblindingtreat))
-
- 
-# RRunblinding=p(Y=1|A=a,B=1)/p(Y=1|A=a,B=0) [name is theta_B in the latax]
-
-# prevplac=p(B=1|A=0)*p(Y=1|A=0,B=1)+p(B=0|A=0)*p(Y=1|A=0,B=0)=0.08
-# prevplac=0.21*p(Y=1|A=0,B=1)+0.79*p(Y=1|A=0,B=0)=0.08
-# p(Y=1|A=0,B=0)=0.08/(0.21*RRunblindingplac+0.79))
+apply(tab_all_risks, 1, function(x) {1 - x[2]/x[1]})
 
 
 
+# Sample size From the trial
+n_A1 <- 4790
+n_A0 <- 3170
+n_sample <- n_A0 + n_A1
 
-#### constants ####
+n_sim <- 1000
+est_ve_minus1 <- est_ve_S0 <- est_ve_m0 <- est_ve_m1 <- est_ve_tot <- est_ve_S1 <- vector(length = n_sim)
+est_risk_a0m0 <- est_risk_a0m1 <- est_risk_a1m0 <- est_risk_a1m1 <- vector(length = n_sim)
 
-##incidence in seasonal B (PCR)
-incplacB=0.08
-inctreatB=0.03
-##incidence in pand A (serology)
-incplacA=0.17
-inctreatA=0.09
+for(i in 1:n_sim)
+{
+A <- B <- S <- Y <- vector(length = n_sample)
+A[1:n_A0] <- 0
+A[(n_A0 + 1):n_sample] <- 1
+# Simulate S|A
+S[A==0] <- rbinom(n = n_A0, size = 1, prob = prS_a0)
+S[A==1] <- rbinom(n = n_A1, size = 1, prob = prS_a1)
+n_S0 <- sum(S==0)
+n_S1 <- sum(S==1)
+# Simulate B|S
+B[S==0] <- rbinom(n = n_S0, size = 1, prob = prB_s0)
+B[S==1] <- rbinom(n = n_S1, size = 1, prob = prB_s1)
+n_A0B0 <- sum(A==0 & B==0)
+n_A0B1 <- sum(A==0 & B==1)
+n_A1B0 <- sum(A==1 & B==0)
+n_A1B1 <- sum(A==1 & B==1)
+# Simulate Y|A, B
+Y[A==0 & B==0] <- rbinom(n = n_A0B0, size = 1, prob = all_risks$risk_a0m0)
+Y[A==0 & B==1] <- rbinom(n = n_A0B1, size = 1, prob = all_risks$risk_a0m1)
+Y[A==1 & B==0] <- rbinom(n = n_A1B0, size = 1, prob = all_risks$risk_a1m0)
+Y[A==1 & B==1] <- rbinom(n = n_A1B1, size = 1, prob = all_risks$risk_a1m1)  
 
+# Estimates; not that we assume S is not observed
+est_ve_minus1[i] <- 1 - mean(Y[A==1])/mean(Y[A==0])
+est_ve_S0[i] <- 1 - mean(Y[A==1 & S==0])/mean(Y[A==0 & S==0])
+est_ve_S1[i] <- 1 - mean(Y[A==1 & S==1])/mean(Y[A==0 & S==1])
+est_risk_a0m0[i] <- mean(Y[A==0 & S==0 & B==0])*mean(S[A==0]==0) + mean(Y[A==0 & S==1 & B==0])*mean(S[A==0]==1)
+est_risk_a0m1[i] <- mean(Y[A==0 & S==0 & B==1])*mean(S[A==0]==0) + mean(Y[A==0 & S==1 & B==1])*mean(S[A==0]==1)
+est_risk_a1m0[i] <- mean(Y[A==1 & S==0 & B==0])*mean(S[A==0]==0) + mean(Y[A==1 & S==1 & B==0])*mean(S[A==0]==1)
+est_risk_a1m1[i] <- mean(Y[A==1 & S==0 & B==1])*mean(S[A==0]==0) + mean(Y[A==1 & S==1 & B==1])*mean(S[A==0]==1)
+est_ve_m0[i] <- 1 - est_risk_a1m0[i]/est_risk_a0m0[i]
+est_ve_m1[i] <- 1 - est_risk_a1m1[i]/est_risk_a0m1[i]
+est_ve_tot[i] <- 1 - est_risk_a1m1[i]/est_risk_a0m0[i]
+}
 
-
-
-
-##two outcomes flu A and B
-##Ntreated=479
-##Nplac=317
-##incidence in seasonal B (PCR)
-#incplacB=0.08
-#inctreatB=0.03
-##incidence in pand A (serology)
-#incplacA=0.17
-#inctreatA=0.09
-
-##adverse effects (Table S1)
-## pain/soreness
-#AEplacmild=0.19; AEplacmod=0.02;AEplacsev=0
-#AEtreatmild=0.0.41; AEtreatmod=0.08;AEtreatsev=0.01
-
-
-# PrevTrtFunc <- function(probBA, probYAB)
-# {
-#   # ProbBA - vector of length 2 Pr(B=1|A=a)
-#   # ProbYBA - matrix 2X2, first col A=0, second A=1,
-#   # first row B  Pr(B=1|A=a)
-# }
-```
-
-```{r}
-### how does blinding affect exposure? ####
-RRunblindingtreat=1.5
-RRunblindingplac=1.5
+round(mean(est_ve_tot), 3)
+round(mean(est_ve_m0), 3)
+round(mean(est_ve_m1), 3)
+round(mean(est_ve_minus1), 3)
+round(mean(est_ve_S0), 3)
+round(mean(est_ve_S1), 3)
