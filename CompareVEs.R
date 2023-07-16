@@ -62,7 +62,7 @@ ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   scale_color_manual(values = colors) 
   #guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
-ggsave("Plots/VEminus1VersusVEtotal2.png")
+ggsave("Plots/VEminus1VersusVEtotal.png")
 
 ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
