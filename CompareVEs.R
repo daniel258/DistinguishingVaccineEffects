@@ -42,15 +42,15 @@ num_colors <- length(unique(df_all$RR_B))
 colors <- colorRampPalette(c("darkblue", "lightblue"))(num_colors)
 
 ##plotting everything
-ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
+ggplot(filter(df_all, RR_B_cont>=1),aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-  geom_segment(aes(x = 0, xend = 0.5, y = 0.94,yend = 0.94),col = "red") +
-  annotate("text", x = 0.3, y = 1, label = "COVID-19") +
+  geom_segment(aes(x = 0, xend = 0.94, y = 0.94,yend = 0.94),col = "red") +
+  annotate("text", size = 5, x = 0.3, y = 0.9, label = "COVID-19") +
   geom_segment(aes(x = 0.71, xend = 1, y = 0.71, yend = 0.71), col = "red") +
-  annotate("text", x = 0.875, y = 0.76, label = "pertussis") +
-  geom_segment(aes(x = 0.55, xend = 1.00, y = 0.55, yend = 0.55), col = "red") +
-  annotate("text", x = 0.875, y = 0.6, label="influenza") +
-  ylab("VE(-1)") +   xlab(expression("VE"[t])) +
+  annotate("text", size = 5, x = 0.875, y = 0.66, label = "pertussis") +
+  geom_segment(aes(x = 0.5, xend = 1.00, y = 0.5, yend = 0.5), col = "red") +
+  annotate("text", size = 5, x = 0.85, y = 0.45, label="influenza") +
+  ylab("VE(-1)") +   xlab(expression(bold("VE"[t]))) +
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0),
                      sec.axis = sec_axis(~ .)) +
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
@@ -60,10 +60,12 @@ ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   theme(legend.title =  element_text(size = 10, face = "bold"))+
   theme(legend.title =  element_text(size = 10, face = "bold")) +
   scale_color_manual(values = colors) +
-  guides(color = guide_legend(title = expression("RR"[b])))
+  guides(color = guide_legend(title = expression(bold(RR[B]))))
+  #guides(color = guide_legend(title = expression(("RR"[b]))))
   #guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
-ggsave("Plots/VEminus1VersusVEtotal.png")
+#ggsave("Plots/VEminus1VersusVEtotal.png")
+ggsave("Plots/VEminus1VersusVEtotal.png", width = 6, height = 5)
 
 ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
@@ -71,8 +73,8 @@ ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   annotate("text", x=0.3, y=1, label="COVID-19")+
   geom_segment(aes(x=0, xend=0.71,y=0.71,yend=0.71),col="red") +
   annotate("text", x=0.3, y=0.76, label="pertussis")+
-  geom_segment(aes(x=0, xend=0.55,y=0.55,yend=0.55),col="red") +
-  annotate("text", x=0.3, y=0.6, label="influenza")+
+  geom_segment(aes(x=0, xend=0.5,y=0.5,yend=0.5),col="red") +
+  annotate("text", x=0.3, y=0.55, label="influenza")+
   ylab("VE(-1)") +
   xlab("VE(0) = VE(1)") + 
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0)) +
@@ -82,7 +84,8 @@ ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   theme(axis.title.y =  element_text(size = 12, face = "bold")) +
   theme(legend.title =  element_text(size = 10, face = "bold")) +
   theme(legend.title =  element_text(size = 10, face = "bold")) +
-  scale_color_manual(values = colors) 
+  scale_color_manual(values = colors) +
+  guides(color = guide_legend(title = expression("RR"[B])))
 
 ggsave("Plots/VEminus1VersusVE01.png")
 
