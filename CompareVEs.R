@@ -44,7 +44,7 @@ colors <- colorRampPalette(c("darkblue", "lightblue"))(num_colors)
 ##plotting everything
 ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-  geom_segment(aes(x = 0, xend = 0.94, y = 0.94,yend = 0.94),col = "red") +
+  geom_segment(aes(x = 0, xend = 0.5, y = 0.94,yend = 0.94),col = "red") +
   annotate("text", x = 0.3, y = 1, label = "COVID-19") +
   geom_segment(aes(x = 0.71, xend = 1, y = 0.71, yend = 0.71), col = "red") +
   annotate("text", x = 0.875, y = 0.76, label = "pertussis") +
@@ -59,7 +59,8 @@ ggplot(df_all,aes(x = VE_total, y = VEminus1, group = RR_B, col = RR_B)) +
   theme(axis.title.y =  element_text(size = 12, face = "bold"))+
   theme(legend.title =  element_text(size = 10, face = "bold"))+
   theme(legend.title =  element_text(size = 10, face = "bold")) +
-  scale_color_manual(values = colors) 
+  scale_color_manual(values = colors) +
+  guides(color = guide_legend(title = expression("RR"[b])))
   #guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
 ggsave("Plots/VEminus1VersusVEtotal.png")
@@ -100,3 +101,4 @@ ggplot(df_all, aes(x = VE1, y = VE_total)) +
   #guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
 ggsave("Plots/VE01VersusVEtotal.png")
+
