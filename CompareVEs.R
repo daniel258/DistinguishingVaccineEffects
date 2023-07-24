@@ -67,7 +67,7 @@ ggplot(filter(df_all, RR_B_cont>=1),aes(x = VE_total, y = VEminus1, group = RR_B
 #ggsave("Plots/VEminus1VersusVEtotal.png")
 ggsave("Plots/VEminus1VersusVEtotal.png", width = 6, height = 5)
 
-ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
+ggplot(filter(df_all, RR_B_cont>=1),aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
   geom_segment(aes(x=0, xend=0.94,y=0.94,yend=0.94),col="red") +
   annotate("text", x=0.3, y=1, label="COVID-19")+
@@ -85,13 +85,13 @@ ggplot(df_all,aes(x = VE1, y = VEminus1, group = RR_B, col = RR_B)) +
   theme(legend.title =  element_text(size = 10, face = "bold")) +
   theme(legend.title =  element_text(size = 10, face = "bold")) +
   scale_color_manual(values = colors) +
-  guides(color = guide_legend(title = expression("RR"[B])))
+  guides(color = guide_legend(title = expression(bold(RR[B]))))
 
-ggsave("Plots/VEminus1VersusVE01.png")
+ggsave("Plots/VEminus1VersusVE01.png", width = 6, height = 5)
 
 ggplot(df_all, aes(x = VE1, y = VE_total)) +
   geom_line() + geom_abline(slope = 1, intercept = 0,linetype = "dashed") + 
-  ylab("VE_t") +
+  ylab(expression(bold("VE"[t]))) +  
   xlab("VE(0) = VE(1)") + 
   scale_y_continuous(limits = c(0, 1.1), expand = c(0, 0)) +
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
@@ -103,5 +103,5 @@ ggplot(df_all, aes(x = VE1, y = VE_total)) +
   #scale_color_manual(values = colors) 
   #guides(color = guide_colourbar(barwidth = 0.5, barheight = 5))
 
-ggsave("Plots/VE01VersusVEtotal.png")
+ggsave("Plots/VE01VersusVEtotal.png", width = 6, height = 5)
 
