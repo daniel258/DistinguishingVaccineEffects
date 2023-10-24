@@ -1,2 +1,2 @@
-# DistinguishingVaccineEffects
-check123
+# Distinguishing VaccineEffects
+Numerical examples and simulations for the paper: 
