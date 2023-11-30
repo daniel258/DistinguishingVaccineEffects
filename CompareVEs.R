@@ -1,4 +1,4 @@
-#### VE comparison for Stensrud et al (2023+)
+#### VE comparison for Stensrud, Nevo Obolski (Epidemiology, 2024)
 # This file creates the plots comparing VE(-1), VE(0), VE(1) and VE_t 
 
 #### setting up stuff ####

@@ -1,4 +1,4 @@
-#### VE hypothetical example for Stensrud et al (2023+)
+#### VE hypothetical example for Stensrud, Nevo Obolski (Epidemiology, 2024)
 ### Modeled after Cowling et al. 2012 paper
 set.seed(314)
 
@@ -90,8 +90,7 @@ round(mean(est_ve_S0), 3),
 round(mean(est_ve_S1), 3))
 #[1] 0.463 0.380 0.575 0.273 0.446 0.526
 
-#Repeat with karger sample size
-# Larger Sample size 
+#Repeat with larger sample size
 n_A1 <- 4790
 n_A0 <- 3170
 n_sample <- n_A0 + n_A1
@@ -123,7 +122,7 @@ for(i in 1:n_sim)
   Y[A==1 & B==0] <- rbinom(n = n_A1B0, size = 1, prob = all_risks$risk_a1m0)
   Y[A==1 & B==1] <- rbinom(n = n_A1B1, size = 1, prob = all_risks$risk_a1m1)  
   
-  # Estimates; not that we assume S is not observed
+  # Estimates; note that we assume S is observed
   est_ve_minus1[i] <- 1 - mean(Y[A==1])/mean(Y[A==0])
   est_ve_S0[i] <- 1 - mean(Y[A==1 & S==0])/mean(Y[A==0 & S==0])
   est_ve_S1[i] <- 1 - mean(Y[A==1 & S==1])/mean(Y[A==0 & S==1])
